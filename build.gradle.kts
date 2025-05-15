@@ -15,9 +15,15 @@ java {
 
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("https://repo.spring.io/milestone")
+		name = "Spring Milestones"
+	}
 }
 
 dependencies {
+	implementation("org.springframework.ai:spring-ai-mcp-server-webmvc-spring-boot-starter:1.0.0-M6")
+
 	implementation("org.springframework.boot:spring-boot-starter")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
