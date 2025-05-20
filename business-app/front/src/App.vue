@@ -53,10 +53,12 @@ const fetchOrders = async () => {
     // Replace with your actual API endpoint
     const response = await axios.get<Order[]>('http://localhost:8081/orders')
     
-    orders.value = response.data.map(order => ({
-      ...order,
-      photoUrl: order.photoUrl || getRandomPhotoUrl() // Use random photo if missing
-    }))
+    orders.value = response.data
+      .filter(order => order.status !== 'CREATED') // Filter out orders with CREATED status
+      .map(order => ({
+        ...order,
+        photoUrl: order.photoUrl || getRandomPhotoUrl() // Use random photo if missing
+      }))
   } catch (err) {
     console.error('Error fetching orders:', err)
     error.value = 'Failed to load orders. Please try again later.'
@@ -75,7 +77,10 @@ onMounted(fetchOrders)
 <template>
   <div class="order-page">
     <header class="page-header">
-      <h1>Customer Orders</h1>
+      <h1 class="beautiful-title">
+        <span class="icon">🛒</span>
+        <span>Customer <span class="highlight">Orders</span></span>
+      </h1>
       <p>Track and manage your orders efficiently</p>
     </header>
     
@@ -93,13 +98,17 @@ onMounted(fetchOrders)
     
     <!-- Orders list -->
     <div v-else class="order-list">
-      <div v-for="order in orders" :key="order.id" class="order-card">
+      <div
+        v-for="order in orders"
+        :key="order.id"
+        class="order-card"
+      >
         <img :src="order.photoUrl" alt="Order Photo" class="order-photo" />
         <div class="order-details">
           <h2>{{ order.customerName }}</h2>
           <p><strong>Order Date:</strong> {{ order.orderDate }}</p>
           <p><strong>Total Amount:</strong> ${{ order.totalAmount.toFixed(2) }}</p>
-          <p><strong>Status:</strong> <span :class="`status-${order.status.toLowerCase()}`">{{ order.status }}</span></p>
+          <p><strong>Status:</strong> <span :class="`status-${order.status?.toLowerCase()}`">{{ order.status }}</span></p>
         </div>
       </div>
       

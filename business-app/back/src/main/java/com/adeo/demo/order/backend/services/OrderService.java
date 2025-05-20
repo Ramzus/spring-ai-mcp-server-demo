@@ -39,10 +39,7 @@ public class OrderService {
     }
 
     public List<OrderDto> getAllOrders() {
-        List<OrderDto> orders = new ArrayList<>();
-        orders.add(new OrderDto(1L, "John Doe", LocalDate.now(), OrderStatus.PENDING, "https://example.com/photo.jpg", 100.0));
-        return orders;
-        //return orderRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+        return orderRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional
