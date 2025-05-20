@@ -3,10 +3,15 @@ package com.adeo.demo.order.backend.services;
 import com.adeo.demo.order.backend.persistence.Order;
 import com.adeo.demo.order.backend.persistence.OrderRepository;
 import com.adeo.demo.order.backend.web.dto.OrderDto;
+import com.adeo.demo.order.backend.web.dto.enums.OrderStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +39,10 @@ public class OrderService {
     }
 
     public List<OrderDto> getAllOrders() {
-        return orderRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+        List<OrderDto> orders = new ArrayList<>();
+        orders.add(new OrderDto(1L, "John Doe", LocalDate.now(), OrderStatus.PENDING, "https://example.com/photo.jpg", 100.0));
+        return orders;
+        //return orderRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional
