@@ -41,14 +41,20 @@ public class OrderController {
             logger.warn("Order with id {} not found", id);
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PostMapping
+    }    @PostMapping
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
         logger.info("Request received to create a new order: {}", orderDto);
         OrderDto created = orderService.createOrder(orderDto);
         logger.info("Order created successfully with id: {}", created.getOrderId());
         return ResponseEntity.ok(created);
+    }
+
+    @PostMapping("/{id}/next")
+    public ResponseEntity<OrderDto> nextOrderStep(@PathVariable Long id) {
+        logger.info("Request received to move forward order: {}", id);
+        OrderDto updatedOrder = orderService.nextOrderStep(id);
+        logger.info("Order move forward successfully with id {} and new status {}", updatedOrder.getOrderId(), updatedOrder.getStatus());
+        return ResponseEntity.ok(updatedOrder);
     }
 
     @PutMapping("/{id}")
