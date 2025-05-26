@@ -74,6 +74,13 @@ public class OrderService {
 
     @Transactional
     public void deleteOrder(Long orderId) {
+        Optional<Order> existingOrder = orderRepository.findById(orderId); // Ensure the order exists before deletion
+        if (existingOrder.isEmpty() ){
+            throw new IllegalArgumentException("Order not found with ID: " + orderId);
+        }
+        if(existingOrder.get().getStatus() != OrderStatus.FINISHED || existingOrder.get().getStatus() != OrderStatus.CANCELLED) {
+            throw new IllegalStateException("Cannot delete order that is not FINISHED or CANCELLED");
+        }
         orderRepository.deleteById(orderId);
     }
 
