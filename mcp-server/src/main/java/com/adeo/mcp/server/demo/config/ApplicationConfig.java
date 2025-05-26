@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 class ApplicationConfig {
 
     public @Bean com.mongodb.client.MongoClient mongoClient() {
-        return com.mongodb.client.MongoClients.create("mongodb://172.26.64.1:27017");
+        return com.mongodb.client.MongoClients.create("mongodb://localhost:27017");
     }
 
 }

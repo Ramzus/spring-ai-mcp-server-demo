@@ -97,23 +97,24 @@ onMounted(fetchOrders)
     </div>
     
     <!-- Orders list -->
-    <div v-else class="order-list">
-      <div
-        v-for="order in orders"
-        :key="order.id"
-        class="order-card"
-      >
-        <img :src="order.photoUrl" alt="Order Photo" class="order-photo" />
-        <div class="order-details">
-          <h2>{{ order.customerName }}</h2>
-          <p><strong>Order Date:</strong> {{ order.orderDate }}</p>
-          <p><strong>Total Amount:</strong> ${{ order.totalAmount.toFixed(2) }}</p>
-          <p><strong>Status:</strong> <span :class="`status-${order.status?.toLowerCase()}`">{{ order.status }}</span></p>
-        </div>
-      </div>
-      
+    <div v-else>
       <div v-if="orders.length === 0" class="no-orders">
         <p>No orders found.</p>
+      </div>
+      <div v-else class="order-list">
+        <div
+          v-for="order in orders"
+          :key="order.id"
+          class="order-card"
+        >
+          <img :src="order.photoUrl" alt="Order Photo" class="order-photo" />
+          <div class="order-details">
+            <h2>{{ order.customerName }}</h2>
+            <p><strong>Order Date:</strong> {{ order.orderDate }}</p>
+            <p><strong>Total Amount:</strong> ${{ order.totalAmount.toFixed(2) }}</p>
+            <p><strong>Status:</strong> <span :class="`status-${order.status?.toLowerCase()}`">{{ order.status }}</span></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

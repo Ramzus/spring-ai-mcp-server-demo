@@ -1,4 +1,0 @@
---INSERT INTO orders (id, customerName, orderDate, totalAmount) VALUES
---(1, 'John Doe', '2023-10-01', 1, 100.00),
---(2, 'Alicia Date', '2023-10-02', 2, 200.00),
---(3, 'Eric Dupont', '2023-10-03', 3, 300.00);

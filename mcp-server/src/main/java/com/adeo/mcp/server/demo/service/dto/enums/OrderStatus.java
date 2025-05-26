@@ -1,10 +1,9 @@
-package com.adeo.demo.order.backend.web.dto.enums;
+package com.adeo.mcp.server.demo.service.dto.enums;
 
 public enum OrderStatus {
     CREATED,
     PENDING,
     SHIPPED,
     DELIVERED,
-    CANCELLED,
-    FINISHED
+    CANCELLED;
 }
