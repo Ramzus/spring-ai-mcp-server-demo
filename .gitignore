@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+/payment-app/front/.vite/deps/_metadata.json
+/payment-app/front/.vite/deps/package.json
+/payment-app/front/.vite/deps/vue.js
+/payment-app/front/.vite/deps/vue.js.map
