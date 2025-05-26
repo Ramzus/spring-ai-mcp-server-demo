@@ -2,7 +2,7 @@ services:
   # Business App Services
   order-backend:
     build: 
-      context: ./business-app/back
+      context: order-app/back
       dockerfile: Dockerfile
     container_name: order-backend
     ports:
@@ -23,7 +23,7 @@ services:
 
   order-frontend:
     build:
-      context: ./business-app/front
+      context: order-app/front
       dockerfile: Dockerfile
     container_name: order-ui
     ports:
