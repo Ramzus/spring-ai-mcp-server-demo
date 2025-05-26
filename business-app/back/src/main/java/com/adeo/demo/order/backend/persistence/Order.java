@@ -13,11 +13,9 @@ public class Order {
 
     private String customerName;
 
-    private LocalDate orderDate;
+    private LocalDate orderDate;    private Double totalAmount;
 
-    private Double totalAmount;
-
-    private String photoUrl;
+    private Integer numberOfItems;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -30,13 +28,11 @@ public class Order {
     public void setCustomerName(String customerName) { this.customerName = customerName; }
 
     public LocalDate getOrderDate() { return orderDate; }
-    public void setOrderDate(LocalDate orderDate) { this.orderDate = orderDate; }
-
-    public Double getTotalAmount() { return totalAmount; }
+    public void setOrderDate(LocalDate orderDate) { this.orderDate = orderDate; }    public Double getTotalAmount() { return totalAmount; }
     public void setTotalAmount(Double totalAmount) { this.totalAmount = totalAmount; }
 
-    public String getPhotoUrl() { return photoUrl; }
-    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
+    public Integer getNumberOfItems() { return numberOfItems; }
+    public void setNumberOfItems(Integer numberOfItems) { this.numberOfItems = numberOfItems; }
 
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
