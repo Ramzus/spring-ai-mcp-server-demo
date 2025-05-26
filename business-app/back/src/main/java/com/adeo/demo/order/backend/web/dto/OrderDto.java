@@ -1,6 +1,7 @@
 package com.adeo.demo.order.backend.web.dto;
 
 import com.adeo.demo.order.backend.web.dto.enums.OrderStatus;
+import com.adeo.demo.order.backend.web.dto.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class OrderDto {
     private String customerName;
     private LocalDate orderDate;
     private OrderStatus status;
-    private String photoUrl;
+    private Integer numberOfItems;
     private double totalAmount;
+    private PaymentStatus paymentStatus;
 }

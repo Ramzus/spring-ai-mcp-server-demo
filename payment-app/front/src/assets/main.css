@@ -9,6 +9,7 @@ html, body {
   width: 100vw;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 body {
@@ -19,6 +20,7 @@ body {
   min-height: 100vh;
   width: 100vw;
   background: #000;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 #app {
@@ -36,6 +38,7 @@ body {
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
   position: relative;
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
 a,
@@ -102,8 +105,6 @@ a:hover, .green:hover {
   width: 100%;
   box-sizing: border-box;
   padding-top: 11rem; /* More space for header */
-  display: flex;
-  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -114,17 +115,15 @@ a:hover, .green:hover {
 
 /* Order List Styling */
 .order-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   justify-content: center;
+  align-items: stretch;
   padding: 0 2rem;
   max-width: 1800px;
   margin: 0 auto;
   margin-top: 1.5rem; /* Add space between header and first card */
-  width: 100%;
-  box-sizing: border-box;
-  grid-auto-rows: min-content;
 }
 
 /* Order Card Styling */
@@ -133,8 +132,9 @@ a:hover, .green:hover {
   border-radius: 14px;
   box-shadow: 0 2px 12px rgba(120, 190, 32, 0.10);
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  flex: 0 1 340px;
+  max-width: 380px;
+  min-width: 260px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -142,8 +142,7 @@ a:hover, .green:hover {
   text-align: left;
   transition: transform 0.2s, box-shadow 0.2s;
   border: 1.5px solid var(--lm-green);
-  margin-bottom: 0;
-  box-sizing: border-box;
+  margin-bottom: 2rem;
 }
 
 .order-card:hover {
@@ -152,29 +151,11 @@ a:hover, .green:hover {
   border-color: var(--lm-dark-green);
 }
 
-.order-icon {
+.order-photo {
   width: 100%;
-  height: 120px;
-  background: linear-gradient(135deg, var(--lm-light-green) 0%, var(--lm-green) 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--lm-dark-green);
-  font-weight: bold;
-  position: relative;
-}
-
-.order-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.order-icon small {
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
-  opacity: 0.8;
+  height: 210px;
+  object-fit: cover;
+  background: var(--lm-light-green);
 }
 
 .order-details {
@@ -212,20 +193,6 @@ a:hover, .green:hover {
   font-weight: bold;
 }
 
-/* Payment Status Styling */
-.payment-pending {
-  color: #ff9800;
-  font-weight: bold;
-}
-.payment-completed {
-  color: var(--lm-green);
-  font-weight: bold;
-}
-.payment-failed {
-  color: #f44336;
-  font-weight: bold;
-}
-
 /* No Orders Message */
 .no-orders {
   text-align: center;
@@ -233,8 +200,6 @@ a:hover, .green:hover {
   width: 100%;
   color: #888;
   font-size: 1.2rem;
-  margin: 2rem auto;
-  max-width: 1200px;
 }
 
 /* Error Styling */
@@ -294,38 +259,37 @@ a:hover, .green:hover {
 }
 
 /* Responsive Design */
-@media (max-width: 1400px) {
-  .order-list {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.8rem;
-  }
-}
-
 @media (max-width: 1200px) {
+  .order-card {
+    flex: 1 1 280px;
+    max-width: 320px;
+    min-width: 200px;
+  }
   .order-list {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 1.5rem;
   }
 }
 
 @media (max-width: 1080px) {
+  .order-card {
+    flex: 1 1 220px;
+    max-width: 260px;
+    min-width: 160px;
+  }
   .order-list {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 1.2rem;
   }
 }
 
 @media (max-width: 768px) {
-  .order-list {
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-    gap: 1.2rem;
-    padding: 0 0.8rem;
+  .order-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 1.2rem;
   }
-}
-
-@media (max-width: 480px) {
   .order-list {
+    gap: 0.7rem;
     padding: 0 0.5rem;
-    gap: 1rem;
   }
 }

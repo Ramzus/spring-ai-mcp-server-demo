@@ -4,6 +4,7 @@ import com.adeo.demo.order.backend.persistence.Order;
 import com.adeo.demo.order.backend.persistence.OrderRepository;
 import com.adeo.demo.order.backend.web.dto.OrderDto;
 import com.adeo.demo.order.backend.web.dto.enums.OrderStatus;
+import com.adeo.demo.order.backend.web.dto.enums.PaymentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final PaymentServiceClient paymentServiceClient;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, PaymentServiceClient paymentServiceClient) {
         this.orderRepository = orderRepository;
+        this.paymentServiceClient = paymentServiceClient;
     }
 
     @Transactional
@@ -82,17 +85,17 @@ public class OrderService {
             throw new IllegalStateException("Cannot delete order that is not FINISHED or CANCELLED");
         }
         orderRepository.deleteById(orderId);
-    }
-
-    // --- Mapping helpers ---
+    }    // --- Mapping helpers ---
     private OrderDto toDto(Order order) {
+        PaymentStatus paymentStatus = paymentServiceClient.getPaymentStatusByOrderId(order.getId());
         return new OrderDto(
                 order.getId(),
                 order.getCustomerName(),
                 order.getOrderDate(),
                 order.getStatus(),
-                order.getPhotoUrl(),
-                order.getTotalAmount()
+                order.getNumberOfItems(),
+                order.getTotalAmount(),
+                paymentStatus
         );
     }
 
@@ -101,15 +104,13 @@ public class OrderService {
         order.setId(null); // Ensure a new entity is created
         order.setStatus(OrderStatus.CREATED);
         return order;
-    }
-
-    private Order toEntity(OrderDto dto) {
+    }    private Order toEntity(OrderDto dto) {
         Order order = new Order();
-        order.setId(order.getId());
+        order.setId(dto.getOrderId());
         order.setCustomerName(dto.getCustomerName());
         order.setOrderDate(dto.getOrderDate());
         order.setTotalAmount(dto.getTotalAmount());
-        order.setPhotoUrl(dto.getPhotoUrl());
+        order.setNumberOfItems(dto.getNumberOfItems());
         order.setStatus(dto.getStatus());
         return order;
     }

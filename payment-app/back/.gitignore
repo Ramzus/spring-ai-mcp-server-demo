@@ -16,9 +16,10 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-b
+
 ### IntelliJ IDEA ###
 .idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -35,7 +36,3 @@ out/
 
 ### VS Code ###
 .vscode/
-/payment-app/front/.vite/deps/_metadata.json
-/payment-app/front/.vite/deps/package.json
-/payment-app/front/.vite/deps/vue.js
-/payment-app/front/.vite/deps/vue.js.map
