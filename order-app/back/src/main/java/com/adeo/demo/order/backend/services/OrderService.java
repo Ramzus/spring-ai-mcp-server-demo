@@ -51,20 +51,30 @@ public class OrderService {
             return toDto(saved);
         }
         return null;
-    }
-
-    private OrderStatus getNextOrderStatus(Long orderId) {
+    }    private OrderStatus getNextOrderStatus(Long orderId) {
         OrderDto orderDto = getOrder(orderId);
         OrderStatus currentStatus = orderDto.getStatus();
         PaymentStatus paymentStatus = getPaymentStatus(orderId);
+        
+        // Allow CREATED → PENDING transition regardless of payment status
+        if (currentStatus == OrderStatus.CREATED) {
+            return OrderStatus.PENDING;
+        }
+        
+        // For all other transitions, payment must be COMPLETED
+        if (paymentStatus != PaymentStatus.COMPLETED) {
+            throw new IllegalStateException("Cannot progress order beyond PENDING status when payment is not COMPLETED. Current payment status: " + paymentStatus);
+        }
+        
         OrderStatus newStatus = switch (currentStatus) {
-            case CREATED -> OrderStatus.PENDING;
+            case CREATED -> OrderStatus.PENDING; // This case is handled above but kept for completeness
             case PENDING -> OrderStatus.SHIPPED;
             case SHIPPED -> OrderStatus.DELIVERED;
             case DELIVERED -> OrderStatus.FINISHED;
-            case CANCELLED, FINISHED -> throw new IllegalStateException("Cannot progress from CANCELLED status");
+            case CANCELLED, FINISHED -> throw new IllegalStateException("Cannot progress from " + currentStatus + " status");
         };
-        return (paymentStatus == PaymentStatus.COMPLETED) ? newStatus : OrderStatus.PENDING; // If payment is not completed, stay in PENDING
+        
+        return newStatus;
     }
 
     @Transactional
@@ -72,8 +82,7 @@ public class OrderService {
         Optional<Order> existingOrder = orderRepository.findById(orderId); // Ensure the order exists before deletion
         if (existingOrder.isEmpty() ){
             throw new IllegalArgumentException("Order not found with ID: " + orderId);
-        }
-        if(existingOrder.get().getStatus() != OrderStatus.FINISHED || existingOrder.get().getStatus() != OrderStatus.CANCELLED) {
+        }        if(existingOrder.get().getStatus() != OrderStatus.FINISHED && existingOrder.get().getStatus() != OrderStatus.CANCELLED) {
             throw new IllegalStateException("Cannot delete order that is not FINISHED or CANCELLED");
         }
         orderRepository.deleteById(orderId);

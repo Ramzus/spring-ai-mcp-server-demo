@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useToast, POSITION } from "vue-toastification"
 
 interface Order {
   orderId: number
@@ -12,12 +13,14 @@ interface Order {
   paymentStatus: string
 }
 
+// Initialize toast
+const toast = useToast()
+
 // State variables
 const orders = ref<Order[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 const advancingOrders = ref<Set<number>>(new Set())
-const successMessage = ref<string | null>(null)
 
 // Function to fetch orders from API
 const fetchOrders = async () => {
@@ -50,20 +53,26 @@ const advanceOrder = async (orderId: number) => {
     // Refresh the orders list after successful advancement
     await fetchOrders()
     
-    // Show success message
-    successMessage.value = `Order ${orderId} advanced successfully!`
-    setTimeout(() => {
-      successMessage.value = null
-    }, 3000)
+    // Show success toast notification
+    toast.success(`🎉 Order ${orderId} advanced successfully!`, {
+      timeout: 4000,
+      position: POSITION.TOP_RIGHT
+    })
     
   } catch (err) {
     console.error('Error advancing order:', err)
-    // Handle specific error cases
+    // Handle specific error cases with toast notifications
     if (axios.isAxiosError(err) && err.response) {
       const errorMessage = err.response.data?.message || err.response.statusText || 'Unknown error'
-      alert(`Error advancing order ${orderId}: ${errorMessage}`)
+      toast.error(`❌ Error advancing order ${orderId}: ${errorMessage}`, {
+        timeout: 6000,
+        position: POSITION.TOP_RIGHT
+      })
     } else {
-      alert(`Error advancing order ${orderId}. Please try again.`)
+      toast.error(`❌ Error advancing order ${orderId}. Please try again.`, {
+        timeout: 6000,
+        position: POSITION.TOP_RIGHT
+      })
     }
   } finally {
     advancingOrders.value.delete(orderId)
@@ -105,11 +114,6 @@ onMounted(fetchOrders)
     <div v-else-if="error" class="error-container">
       <p class="error-message">{{ error }}</p>
       <button class="retry-button" @click="fetchOrders">Retry</button>
-    </div>
-    
-    <!-- Success message -->
-    <div v-if="successMessage" class="success-container">
-      <p class="success-message">{{ successMessage }}</p>
     </div>
     
     <!-- Orders list -->
