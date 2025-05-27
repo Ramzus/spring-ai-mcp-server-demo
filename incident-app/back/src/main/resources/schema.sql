@@ -26,8 +26,3 @@ CREATE INDEX idx_incidents_severity ON incidents(severity);
 CREATE INDEX idx_incidents_assigned_to ON incidents(assigned_to);
 CREATE INDEX idx_incidents_reporter_name ON incidents(reporter_name);
 CREATE INDEX idx_incidents_created_date ON incidents(created_date);
-
--- Insert sample data for development/testing
--- Sample incident data
-INSERT INTO incidents (id, title, description, severity, status, reporter_name, assigned_to, resolution, created_date, updated_date) VALUES
-(1000, 'Order not displayed', 'Customer have create a new order but its not displayed on order UI', 'HIGH', 'OPEN', 'John Doe', 'DevOps Team', null, '2023-10-01', null);
