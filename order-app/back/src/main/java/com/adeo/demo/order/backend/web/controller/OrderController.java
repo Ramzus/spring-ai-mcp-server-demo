@@ -57,20 +57,6 @@ public class OrderController {
         return ResponseEntity.ok(updatedOrder);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long id, @RequestBody OrderDto orderDto) {
-        logger.info("Request received to update order with id: {}", id);
-        orderDto.setOrderId(id);
-        OrderDto updated = orderService.updateOrder(orderDto);
-        if (updated != null) {
-            logger.info("Order with id {} updated successfully", id);
-            return ResponseEntity.ok(updated);
-        } else {
-            logger.warn("Order with id {} not found for update", id);
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         logger.info("Request received to delete order with id: {}", id);
