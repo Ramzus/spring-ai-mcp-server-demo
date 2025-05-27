@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dev": "vue-cli-service serve --port 8084"
+    "dev": "vue-cli-service serve"
   },
   "dependencies": {
     "vue": "^3.3.0",

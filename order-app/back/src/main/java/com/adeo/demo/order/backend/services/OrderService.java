@@ -42,37 +42,29 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto updateOrder(OrderDto orderDto) {
-        if (orderDto.getOrderId() == null) return null;
-        Optional<Order> existing = orderRepository.findById(orderDto.getOrderId());
-        if (existing.isPresent()) {
-            Order order = toEntity(orderDto);
-            Order saved = orderRepository.save(order);
-            return toDto(saved);
-        }
-        return null;
-    }
-
-    @Transactional
     public OrderDto nextOrderStep(Long orderId) {
         Optional<Order> existing = orderRepository.findById(orderId);
         if (existing.isPresent()) {
             Order currentOrder = existing.get();
-            currentOrder.setStatus(getNextOrderStatus(currentOrder.getStatus()));
+            currentOrder.setStatus(getNextOrderStatus(orderId));
             Order saved = orderRepository.save(currentOrder);
             return toDto(saved);
         }
         return null;
     }
 
-    private OrderStatus getNextOrderStatus(OrderStatus currentStatus) {
-        return switch (currentStatus) {
+    private OrderStatus getNextOrderStatus(Long orderId) {
+        OrderDto orderDto = getOrder(orderId);
+        OrderStatus currentStatus = orderDto.getStatus();
+        PaymentStatus paymentStatus = getPaymentStatus(orderId);
+        OrderStatus newStatus = switch (currentStatus) {
             case CREATED -> OrderStatus.PENDING;
             case PENDING -> OrderStatus.SHIPPED;
             case SHIPPED -> OrderStatus.DELIVERED;
             case DELIVERED -> OrderStatus.FINISHED;
             case CANCELLED, FINISHED -> throw new IllegalStateException("Cannot progress from CANCELLED status");
         };
+        return (paymentStatus == PaymentStatus.COMPLETED) ? newStatus : OrderStatus.PENDING; // If payment is not completed, stay in PENDING
     }
 
     @Transactional
@@ -87,7 +79,7 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }    // --- Mapping helpers ---
     private OrderDto toDto(Order order) {
-        PaymentStatus paymentStatus = paymentServiceClient.getPaymentStatusByOrderId(order.getId());
+        PaymentStatus paymentStatus = getPaymentStatus(order.getId());
         return new OrderDto(
                 order.getId(),
                 order.getCustomerName(),
@@ -97,6 +89,14 @@ public class OrderService {
                 order.getTotalAmount(),
                 paymentStatus
         );
+    }
+
+    private PaymentStatus getPaymentStatus(Long orderId) {
+        PaymentStatus paymentStatus = paymentServiceClient.getPaymentStatusByOrderId(orderId);
+        if (paymentStatus == null) {
+            paymentStatus = PaymentStatus.UNKNOWN; // Default to UNKNOWN if no payment status is found
+        }
+        return paymentStatus;
     }
 
     private Order toNewEntity(OrderDto dto) {
@@ -111,7 +111,6 @@ public class OrderService {
         order.setOrderDate(dto.getOrderDate());
         order.setTotalAmount(dto.getTotalAmount());
         order.setNumberOfItems(dto.getNumberOfItems());
-        order.setStatus(dto.getStatus());
         return order;
     }
 }
