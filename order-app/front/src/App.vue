@@ -19,13 +19,6 @@ const error = ref<string | null>(null)
 const advancingOrders = ref<Set<number>>(new Set())
 const successMessage = ref<string | null>(null)
 
-// Default fallback data
-const fallbackOrders = [
-  { orderId: 1, customerName: 'John Doe', orderDate: '2023-10-01', totalAmount: 150.0, numberOfItems: 3, status: 'Pending', paymentStatus: 'PENDING' },
-  { orderId: 2, customerName: 'Jane Smith', orderDate: '2023-10-02', totalAmount: 200.0, numberOfItems: 5, status: 'Shipped', paymentStatus: 'COMPLETED' },
-  { orderId: 3, customerName: 'Alice Johnson', orderDate: '2023-10-03', totalAmount: 300.0, numberOfItems: 2, status: 'Delivered', paymentStatus: 'COMPLETED' },
-]
-
 // Function to fetch orders from API
 const fetchOrders = async () => {
   loading.value = true
@@ -40,9 +33,6 @@ const fetchOrders = async () => {
   } catch (err) {
     console.error('Error fetching orders:', err)
     error.value = 'Failed to load orders. Please try again later.'
-    
-    // Fallback data in case of error
-    orders.value = fallbackOrders
   } finally {
     loading.value = false
   }

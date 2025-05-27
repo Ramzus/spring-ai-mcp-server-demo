@@ -24,14 +24,6 @@ const statusColors = {
   FAILED: '#e74c3c'     // Red
 };
 
-// Default fallback data that matches the business-app orders
-const fallbackPayments = [
-  { paymentId: 1, orderId: 100, customerName: 'John Doe', paymentDate: '2023-10-01', totalAmount: 100.0, status: 'COMPLETED' },
-  { paymentId: 2, orderId: 102, customerName: 'Alicia Date', paymentDate: '2023-10-02', totalAmount: 200.0, status: 'COMPLETED' },
-  { paymentId: 3, orderId: 103, customerName: 'Eric Dupont', paymentDate: '2023-10-03', totalAmount: 300.0, status: 'PENDING' },
-  { paymentId: 4, orderId: 104, customerName: 'Alain Provist', paymentDate: '2023-10-04', totalAmount: 300.0, status: 'FAILED' }
-]
-
 // Function to fetch payments from API
 const fetchPayments = async () => {
   loading.value = true
@@ -43,9 +35,6 @@ const fetchPayments = async () => {
   } catch (err) {
     console.error('Error fetching payments:', err)
     error.value = 'Failed to load payment data. Please try again later.'
-    
-    // Fallback data in case of error
-    payments.value = fallbackPayments
   } finally {
     loading.value = false
   }
