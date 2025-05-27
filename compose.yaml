@@ -1,8 +1,8 @@
 services:
-  # Business App Services
+  # Order App Services
   order-backend:
     build: 
-      context: ./business-app/back
+      context: order-app/back
       dockerfile: Dockerfile
     container_name: order-backend
     ports:
@@ -23,7 +23,7 @@ services:
 
   order-frontend:
     build:
-      context: ./business-app/front
+      context: order-app/front
       dockerfile: Dockerfile
     container_name: order-ui
     ports:
@@ -77,7 +77,45 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      
+
+  # Incident App Services
+  incident-backend:
+    build: 
+      context: ./incident-app/back
+      dockerfile: Dockerfile
+    container_name: incident-backend
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8083
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/api/incidents/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  incident-frontend:
+    build:
+      context: ./incident-app/front
+      dockerfile: Dockerfile
+    container_name: incident-ui
+    ports:
+      - "5175:80"
+    depends_on:
+      - incident-backend
+    environment:
+      - VITE_API_URL=http://incident-backend:8083
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   # Shared Database
   mongo:
     image: 'mongo:7.0.5'
