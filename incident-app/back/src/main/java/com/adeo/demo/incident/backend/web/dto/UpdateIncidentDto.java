@@ -25,7 +25,9 @@ public class UpdateIncidentDto {
     private IncidentSeverity severity;
     
     private IncidentStatus status;
-    
-    @Size(max = 100, message = "Assigned to must not exceed 100 characters")
+      @Size(max = 100, message = "Assigned to must not exceed 100 characters")
     private String assignedTo;
+    
+    @Size(max = 1000, message = "Resolution must not exceed 1000 characters")
+    private String resolution;
 }

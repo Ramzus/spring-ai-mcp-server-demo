@@ -105,10 +105,10 @@ public class IncidentService {
         Incident incident = new Incident();
         incident.setTitle(createIncidentDto.getTitle());
         incident.setDescription(createIncidentDto.getDescription());
-        incident.setSeverity(createIncidentDto.getSeverity());
-        incident.setStatus(IncidentStatus.OPEN); // New incidents are always OPEN
+        incident.setSeverity(createIncidentDto.getSeverity());        incident.setStatus(IncidentStatus.OPEN); // New incidents are always OPEN
         incident.setReporterName(createIncidentDto.getReporterName());
         incident.setAssignedTo(createIncidentDto.getAssignedTo());
+        incident.setResolution(createIncidentDto.getResolution());
         incident.setCreatedDate(LocalDate.now());
         incident.setUpdatedDate(LocalDate.now());
 
@@ -140,9 +140,11 @@ public class IncidentService {
                     }
                     if (updateIncidentDto.getStatus() != null) {
                         incident.setStatus(updateIncidentDto.getStatus());
-                    }
-                    if (updateIncidentDto.getAssignedTo() != null) {
+                    }                    if (updateIncidentDto.getAssignedTo() != null) {
                         incident.setAssignedTo(updateIncidentDto.getAssignedTo());
+                    }
+                    if (updateIncidentDto.getResolution() != null) {
+                        incident.setResolution(updateIncidentDto.getResolution());
                     }
                     incident.setUpdatedDate(LocalDate.now());
 
@@ -175,8 +177,7 @@ public class IncidentService {
      * Convert Incident entity to IncidentDto.
      * @param incident the incident entity
      * @return the incident DTO
-     */
-    private IncidentDto convertToDto(Incident incident) {
+     */    private IncidentDto convertToDto(Incident incident) {
         return new IncidentDto(
                 incident.getId(),
                 incident.getTitle(),
@@ -185,6 +186,7 @@ public class IncidentService {
                 incident.getStatus(),
                 incident.getReporterName(),
                 incident.getAssignedTo(),
+                incident.getResolution(),
                 incident.getCreatedDate(),
                 incident.getUpdatedDate()
         );

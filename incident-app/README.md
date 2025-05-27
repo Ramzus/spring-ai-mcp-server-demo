@@ -127,11 +127,25 @@ incident-app/
 
 The application comes with 5 sample incidents covering different severities and statuses:
 
-1. Server Performance Issue (High/Open)
-2. Login Authentication Problem (Critical/In Progress)
-3. Database Connection Timeout (Medium/Resolved)
-4. Email Service Down (High/Open)
-5. UI Display Bug (Low/Closed)
+1. Server Performance Issue (High/Open) - No resolution
+2. Login Authentication Problem (Critical/In Progress) - Investigating root cause
+3. Database Connection Timeout (Medium/Resolved) - Increased connection pool size and optimized queries  
+4. Email Service Down (High/Open) - No resolution
+5. UI Display Bug (Low/Closed) - Fixed CSS media queries for mobile responsiveness
+
+### Incident Fields
+
+Each incident includes the following fields:
+- **ID**: Unique identifier (auto-generated)
+- **Title**: Brief description of the incident (required, max 255 chars)
+- **Description**: Detailed description (optional, max 1000 chars)
+- **Severity**: Priority level (LOW, MEDIUM, HIGH, CRITICAL)
+- **Status**: Current state (OPEN, IN_PROGRESS, RESOLVED, CLOSED)
+- **Reporter Name**: Person who reported the incident (required, max 100 chars)
+- **Assigned To**: Person or team assigned to resolve (optional, max 100 chars)
+- **Resolution**: Description of how the incident was resolved (optional, max 1000 chars)
+- **Created Date**: When the incident was created
+- **Updated Date**: When the incident was last modified
 
 ## Development
 

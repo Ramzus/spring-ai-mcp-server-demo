@@ -100,9 +100,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div class="mb-3">
+              </div>              <div class="mb-3">
                 <label for="assignedTo" class="form-label">Assigned To</label>
                 <input
                   type="text"
@@ -116,6 +114,23 @@
                 <div v-if="validation.assignedTo" class="invalid-feedback">
                   {{ validation.assignedTo }}
                 </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="resolution" class="form-label">Resolution</label>
+                <textarea
+                  class="form-control"
+                  id="resolution"
+                  v-model="form.resolution"
+                  :class="{ 'is-invalid': validation.resolution }"
+                  placeholder="Enter resolution details (optional)"
+                  rows="3"
+                  maxlength="1000"
+                ></textarea>
+                <div v-if="validation.resolution" class="invalid-feedback">
+                  {{ validation.resolution }}
+                </div>
+                <div class="form-text">{{ form.resolution.length }}/1000 characters</div>
               </div>
 
               <div class="d-flex justify-content-end gap-2">
@@ -142,13 +157,13 @@ import IncidentService from '../services/IncidentService'
 export default {
   name: 'CreateIncident',
   data() {
-    return {
-      form: {
+    return {      form: {
         title: '',
         description: '',
         severity: '',
         reporterName: '',
-        assignedTo: ''
+        assignedTo: '',
+        resolution: ''
       },
       validation: {},
       submitting: false,
@@ -217,10 +232,13 @@ export default {
       } else if (this.form.reporterName.length > 100) {
         this.validation.reporterName = 'Reporter name must not exceed 100 characters'
         isValid = false
+      }      if (this.form.assignedTo.length > 100) {
+        this.validation.assignedTo = 'Assigned to must not exceed 100 characters'
+        isValid = false
       }
 
-      if (this.form.assignedTo.length > 100) {
-        this.validation.assignedTo = 'Assigned to must not exceed 100 characters'
+      if (this.form.resolution.length > 1000) {
+        this.validation.resolution = 'Resolution must not exceed 1000 characters'
         isValid = false
       }
 
@@ -238,14 +256,14 @@ export default {
       } else {
         this.error = errorData.message || 'Validation failed'
       }
-    },
-    resetForm() {
+    },    resetForm() {
       this.form = {
         title: '',
         description: '',
         severity: '',
         reporterName: '',
-        assignedTo: ''
+        assignedTo: '',
+        resolution: ''
       }
       this.validation = {}
       this.error = ''

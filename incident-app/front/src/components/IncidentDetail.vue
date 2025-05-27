@@ -63,10 +63,13 @@
               <div class="row mb-3">
                 <div class="col-sm-3"><strong>Reporter:</strong></div>
                 <div class="col-sm-9">{{ incident.reporterName }}</div>
-              </div>
-              <div class="row mb-3">
+              </div>              <div class="row mb-3">
                 <div class="col-sm-3"><strong>Assigned To:</strong></div>
                 <div class="col-sm-9">{{ incident.assignedTo || 'Unassigned' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3"><strong>Resolution:</strong></div>
+                <div class="col-sm-9">{{ incident.resolution || 'No resolution provided' }}</div>
               </div>
               <div class="row mb-3">
                 <div class="col-sm-3"><strong>Created:</strong></div>
@@ -170,8 +173,7 @@
                     <option value="RESOLVED">Resolved</option>
                     <option value="CLOSED">Closed</option>
                   </select>
-                </div>
-                <div class="mb-3">
+                </div>                <div class="mb-3">
                   <label class="form-label">Assigned To</label>
                   <input 
                     type="text" 
@@ -179,6 +181,16 @@
                     v-model="editForm.assignedTo"
                     maxlength="100"
                   >
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Resolution</label>
+                  <textarea 
+                    class="form-control" 
+                    v-model="editForm.resolution"
+                    rows="3"
+                    maxlength="1000"
+                    placeholder="Describe how this incident was resolved..."
+                  ></textarea>
                 </div>
               </div>
               <div class="modal-footer">
@@ -272,15 +284,15 @@ export default {
       } finally {
         this.updating = false
       }
-    },
-    initEditForm() {
+    },    initEditForm() {
       if (this.incident) {
         this.editForm = {
           title: this.incident.title,
           description: this.incident.description,
           severity: this.incident.severity,
           status: this.incident.status,
-          assignedTo: this.incident.assignedTo
+          assignedTo: this.incident.assignedTo,
+          resolution: this.incident.resolution
         }
       }
     },

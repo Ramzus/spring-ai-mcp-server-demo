@@ -20,9 +20,9 @@ public class IncidentDto {
     private String title;
     private String description;
     private IncidentSeverity severity;
-    private IncidentStatus status;
-    private String reporterName;
+    private IncidentStatus status;    private String reporterName;
     private String assignedTo;
+    private String resolution;
     private LocalDate createdDate;
     private LocalDate updatedDate;
 }

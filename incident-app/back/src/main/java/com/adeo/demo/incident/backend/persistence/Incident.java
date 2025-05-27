@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * Entity representing an incident in the system.
  */
 @Entity
-@Table(name = "incident")
+@Table(name = "incidents")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,10 +36,11 @@ public class Incident {
     private IncidentStatus status;
 
     @Column(name = "reporter_name", nullable = false, length = 100)
-    private String reporterName;
-
-    @Column(name = "assigned_to", length = 100)
+    private String reporterName;    @Column(name = "assigned_to", length = 100)
     private String assignedTo;
+
+    @Column(name = "resolution", length = 1000)
+    private String resolution;
 
     @Column(name = "created_date", nullable = false)
     private LocalDate createdDate;
