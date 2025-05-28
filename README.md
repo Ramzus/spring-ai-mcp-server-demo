@@ -1,6 +1,16 @@
-# Démo AI Agentique - Intégration Docker Complète
+# Agentic AI Demo - Microservices Platform
 
-Cette démo présente une architecture de microservices complète avec un serveur MCP (Model Context Protocol) pour l'IA agentique.
+This demo showcases a complete microservices architecture with a Model Context Protocol (MCP) server for agentic AI applications.
+
+## 🎯 Project Purpose
+
+This project demonstrates a modern microservices platform featuring:
+- **Order Management**: Complete order lifecycle management with status progression
+- **Payment Processing**: Secure payment handling and transaction tracking
+- **Incident Management**: Issue tracking and resolution workflow
+- **AI Integration**: MCP server for intelligent automation and context-aware operations
+
+The platform serves as a reference implementation for building scalable, containerized business applications with AI capabilities.
 
 ## 🏗️ Architecture
 
@@ -25,82 +35,60 @@ Cette démo présente une architecture de microservices complète avec un serveu
                     └─────────────────┘
 ```
 
-## 🚀 Services Inclus
+## 🛠️ Technologies Used
 
-### Applications Frontend
-- **Order App**: Interface de gestion des commandes (Vue.js) - Port 5173
-- **Payment App**: Interface de gestion des paiements (Vue.js) - Port 5174
-- **Incident App**: Interface de gestion des incidents (Vue.js) - Port 5175
+### Frontend
+- **Vue.js 3**: Modern reactive frontend framework
+- **Vite**: Fast build tool and development server
+- **TypeScript**: Type-safe JavaScript development
+- **CSS3**: Modern styling with animations and responsive design
 
-### APIs Backend
-- **Order Backend**: API REST pour les commandes (Spring Boot) - Port 8081
-- **Payment Backend**: API REST pour les paiements (Spring Boot) - Port 8082
-- **Incident Backend**: API REST pour les incidents (Spring Boot) - Port 8083
+### Backend
+- **Spring Boot**: Enterprise-grade Java framework
+- **H2 Database**: Embedded database for development
+- **MongoDB**: Document database for MCP server
+- **Gradle**: Build automation and dependency management
 
 ### Infrastructure
-- **MCP Server**: Serveur de protocole de contexte de modèle (Spring Boot) - Port 8085
-- **MongoDB**: Base de données pour le serveur MCP - Port 27017
+- **Docker & Docker Compose**: Containerization and orchestration
+- **ADEO Certificates**: Enterprise security integration
+- **Health Checks**: Service monitoring and reliability
+- **Multi-stage Builds**: Optimized container images
 
-## 🔧 Configuration
+### APIs & Integration
+- **REST APIs**: Standard HTTP-based service communication
+- **Model Context Protocol (MCP)**: AI-agent integration standard
+- **Spring Boot Actuator**: Production-ready monitoring endpoints
 
-### Certificats ADEO
-Tous les services Java incluent automatiquement le certificat racine ADEO pour les connexions HTTPS sécurisées.
+## 🚀 How to Launch with Docker Compose
 
-### Base de Données
-- **Order Backend**: Base de données H2 intégrée avec données d'exemple
-- **Payment Backend**: Base de données H2 intégrée avec données d'exemple
-- **Incident Backend**: Base de données H2 intégrée avec données d'exemple
-- **MCP Server**: MongoDB partagé pour les métadonnées
+### Prerequisites
+- Docker and Docker Compose installed
+- Ports 5173-5175, 8081-8083, 8085, and 27017 available
 
-### Variables d'Environnement
-```yaml
-# URLs des services backend
-ORDER_SERVICE_BASE_URL=http://order-backend:8081
-PAYMENT_SERVICE_BASE_URL=http://payment-backend:8082
-INCIDENT_SERVICE_BASE_URL=http://incident-backend:8083
-
-# MongoDB pour MCP Server
-MONGODB_URI=mongodb://mongo:27017/mcp-demo
-
-# URLs des APIs pour les frontends
-VITE_API_URL=http://[service]-backend:[port]
-```
-
-## 🚀 Démarrage Rapide
-
-### Prérequis
-- Docker et Docker Compose installés
-- Ports 5173-5175, 8081-8083, 8085, et 27017 disponibles
-
-### Démarrage
+### Quick Start
 ```bash
-# Cloner et naviguer vers le projet
+# Clone and navigate to the project
 cd /path/to/agentic-ai-demo
 
-# Construire et démarrer tous les services
+# Build and start all services
 docker-compose up --build -d
 
-# Vérifier l'état des services
+# Check service status
 docker-compose ps
 
-# Voir les logs
+# View logs
 docker-compose logs -f
 ```
 
-### Test d'Intégration
-```bash
-# Exécuter le script de test complet
-./test_full_integration.sh
-```
+### Access the Applications
 
-## 🌐 Accès aux Applications
+#### User Interfaces
+- **Order Management**: http://localhost:5173
+- **Payment Management**: http://localhost:5174
+- **Incident Management**: http://localhost:5175
 
-### Interfaces Utilisateur
-- **Gestion des Commandes**: http://localhost:5173
-- **Gestion des Paiements**: http://localhost:5174
-- **Gestion des Incidents**: http://localhost:5175
-
-### APIs REST
+#### API Endpoints
 - **Orders API**: http://localhost:8081
   - Health Check: http://localhost:8081/actuator/health
   - Swagger UI: http://localhost:8081/swagger-ui.html
@@ -109,106 +97,56 @@ docker-compose logs -f
 - **Incidents API**: http://localhost:8083
   - Health Check: http://localhost:8083/actuator/health
 
-### MCP Server
-- **Endpoint**: http://localhost:8085
-- **Health Check**: http://localhost:8085/health
+#### Infrastructure Services
+- **MCP Server**: http://localhost:8085
+  - Health Check: http://localhost:8085/health
+- **MongoDB**: localhost:27017 (database: mcp-demo)
 
-### Base de Données
-- **MongoDB**: localhost:27017
-  - Base: mcp-demo
+### Useful Commands
 
-## 🔍 Monitoring et Debug
-
-### Health Checks
-Tous les services incluent des health checks automatiques:
-- Vérification toutes les 30 secondes
-- 3 tentatives avant de marquer comme défaillant
-- Timeout de 10 secondes
-
-### Logs
 ```bash
-# Tous les services
-docker-compose logs -f
-
-# Service spécifique
-docker-compose logs -f order-backend
-docker-compose logs -f mcp-server
-```
-
-### Debug des Conteneurs
-```bash
-# Se connecter à un conteneur
-docker exec -it order-backend bash
-docker exec -it mcp-mongodb mongosh
-
-# Vérifier l'état du réseau
-docker network ls
-docker network inspect agentic-ai-demo_app-network
-```
-
-## 🛠️ Développement
-
-### Modification et Redémarrage
-```bash
-# Reconstruire un service spécifique
-docker-compose up --build -d order-backend
-
-# Redémarrer sans reconstruction
-docker-compose restart order-backend
-```
-
-### Nettoyage
-```bash
-# Arrêter tous les services
+# Stop all services
 docker-compose down
 
-# Arrêter et supprimer les volumes
+# Rebuild specific service
+docker-compose up --build -d order-backend
+
+# View specific service logs
+docker-compose logs -f [service-name]
+
+# Clean up (remove containers and volumes)
 docker-compose down --volumes
 
-# Nettoyage complet (images, conteneurs, volumes)
+# Complete cleanup (including images)
 docker-compose down --volumes --rmi all
 ```
 
-## 📊 Données d'Exemple
+### Health Monitoring
+All services include automatic health checks:
+- Check interval: 30 seconds
+- Retries: 3 attempts before marking as unhealthy
+- Timeout: 10 seconds per check
 
-### Orders
-- 3 commandes d'exemple avec statuts variés
-- Photos d'exemple via picsum.photos
-- Montants et dates réalistes
+## 🔧 Configuration
 
-### Payments
-- Paiements liés aux commandes
-- Différents statuts (PENDING, COMPLETED, FAILED)
+The platform uses environment-based configuration:
 
-### Incidents
-- Incident d'exemple lié aux commandes
-- Workflow de résolution avec assignation
+```yaml
+# Backend service URLs
+ORDER_SERVICE_BASE_URL=http://order-backend:8081
+PAYMENT_SERVICE_BASE_URL=http://payment-backend:8082
+INCIDENT_SERVICE_BASE_URL=http://incident-backend:8083
 
-## 🔐 Sécurité
+# MongoDB connection for MCP Server
+MONGODB_URI=mongodb://mongo:27017/mcp-demo
 
-- Certificats ADEO intégrés dans tous les conteneurs Java
-- Communications inter-services via réseau Docker privé
-- Health checks pour la supervision
-- Variables d'environnement pour la configuration
+# Frontend API configuration
+VITE_API_URL=http://[service]-backend:[port]
+```
 
-## 🚨 Résolution des Problèmes
+## 📊 Sample Data
 
-### Services qui ne démarrent pas
-1. Vérifier les ports disponibles: `netstat -an | grep LISTEN`
-2. Vérifier les logs: `docker-compose logs [service-name]`
-3. Vérifier l'espace disque: `df -h`
-
-### Problèmes de certificats
-1. Vérifier la connectivité: `curl -I https://igc.groupeadeo.com/ADEO_ROOT_CA1.crt`
-2. Reconstruire les images: `docker-compose build --no-cache`
-
-### Problèmes de base de données
-1. Vérifier MongoDB: `docker exec mcp-mongodb mongosh --eval "db.runCommand({ hello: 1 })"`
-2. Vérifier les volumes: `docker volume ls`
-
-## 📝 Notes de Version
-
-- **v1.0**: Configuration initiale avec Order, Payment et Incident apps
-- **v1.1**: Intégration MCP Server et MongoDB
-- **v1.2**: Ajout des certificats ADEO et health checks
-- **v1.3**: Logging complet et données d'exemple
+The platform comes with pre-configured sample data:
+- **Orders**: 8 sample orders with various statuses (CREATED → PENDING → SHIPPED → DELIVERED → FINISHED)
+- **Payments**: 4 payment records with different statuses (COMPLETED, PENDING, FAILED)
+- **Incidents**: 5 incident tickets with various severity levels and resolution states
