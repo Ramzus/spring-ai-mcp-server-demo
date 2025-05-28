@@ -10,7 +10,7 @@ RUN mkdir -p src/main/resources/certs && \
     -keystore $JAVA_HOME/lib/security/cacerts \
     -storepass changeit -noprompt
 
-RUN gradle bootJar --no-daemon
+RUN gradle bootJar
 
 FROM openjdk:21-jdk-slim
 RUN addgroup --system spring && adduser --system spring --ingroup spring
