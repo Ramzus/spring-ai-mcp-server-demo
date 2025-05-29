@@ -1,0 +1,26 @@
+meta {
+  name: update_payment
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:8082/payments/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 3
+}
+
+body:json {
+    {
+      "paymentId": 1,
+      "orderId": 1,
+      "customerName": "John Doe",
+      "paymentDate": "2023-10-01",
+      "totalAmount": 100,
+      "status": "FAILED"
+    }
+}

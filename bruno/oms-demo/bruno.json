@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "oms-demo",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
