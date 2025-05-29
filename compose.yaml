@@ -116,21 +116,6 @@ services:
       timeout: 10s
       retries: 3
 
-  # Shared Database
-  mongo:
-    image: 'mongo:7.0.5'
-    container_name: mcp-mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - app-network
-
-volumes:
-  mongo-data:
-
 networks:
   app-network:
     driver: bridge
-    

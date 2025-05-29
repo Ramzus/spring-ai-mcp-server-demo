@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    kotlin("jvm") version "2.1.20" apply false
     id("org.springframework.boot") version "3.4.5" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
 }
@@ -26,7 +25,7 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
 }

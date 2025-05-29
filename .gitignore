@@ -1,10 +1,19 @@
 HELP.md
+.DS_Store
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/node_modules
+
+# Ignore Gradle wrapper files in subdirectories (keep only root wrapper)
+*/gradlew
+*/gradlew.bat
+*/gradle/wrapper/
+**/*/gradlew
+**/*/gradlew.bat
+**/*/gradle/wrapper/
 
 ### STS ###
 .apt_generated

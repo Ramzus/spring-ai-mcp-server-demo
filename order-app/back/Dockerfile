@@ -3,14 +3,12 @@ COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 
 # Import the ADEO certificate into the JVM's truststore
-RUN mkdir -p src/main/resources/certs && \
-    curl -o src/main/resources/certs/ADEO_ROOT_CA1.crt https://igc.groupeadeo.com/ADEO_ROOT_CA1.crt && \
-    keytool -import -trustcacerts -alias adeo-root-ca \
+RUN keytool -import -trustcacerts -alias adeo-root-ca \
     -file src/main/resources/certs/ADEO_ROOT_CA1.crt \
     -keystore $JAVA_HOME/lib/security/cacerts \
     -storepass changeit -noprompt
 
-RUN gradle bootJar --no-daemon
+RUN gradle bootJar
 
 FROM openjdk:21-jdk-slim
 RUN addgroup --system spring && adduser --system spring --ingroup spring
