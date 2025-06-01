@@ -32,4 +32,16 @@ public class OrderAppTools {
         return order;
     }
 
+    @Tool(description = "Moves an order to the next status.")
+    OrderDto moveOrderForward(@ToolParam(description = "The unique identifier of the order to move forward") Long orderId) {
+        // Check if order exists before trying to move it forward
+        OrderDto existingOrder = orderAppService.getOrder(orderId);
+        if (existingOrder == null) {
+            return null;
+        }
+
+        OrderDto updatedOrder = orderAppService.moveOrderForward(orderId);
+
+        return updatedOrder;
+    }
 }
