@@ -1,29 +1,33 @@
 package com.example.oms.mcp.server.service.dto;
 
 import com.example.oms.mcp.server.service.dto.enums.OrderStatus;
+import com.example.oms.mcp.server.service.dto.enums.PaymentStatus;
 
 import java.time.LocalDate;
 
 public class OrderDto {
 
-    private Long orderId;  // Unique identifier for the order
-    private String customerName;  // Name of the customer who placed the order
-    private LocalDate orderDate;  // Date when the order was placed
-    private OrderStatus status;  // Current status of the order (e.g., CREATED, PENDING, SHIPPED, DELIVERED, CANCELLED)
-    private String photoUrl;  // URL of the product photo associated with the order
-    private double totalAmount;  // Total amount for the order
+    private Long orderId;
+    private String customerName;
+    private LocalDate orderDate;
+    private OrderStatus status;
+    private Integer numberOfItems;
+    private double totalAmount;
+    private PaymentStatus paymentStatus;
+
     public OrderDto() {
         // Default constructor
     }
-    public OrderDto(Long orderId, String customerName, LocalDate orderDate, OrderStatus status, String photoUrl, double totalAmount) {
+
+    public OrderDto(Long orderId, String customerName, LocalDate orderDate, OrderStatus status, String photoUrl, Integer numberOfItems, double totalAmount, PaymentStatus paymentStatus) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.orderDate = orderDate;
         this.status = status;
-        this.photoUrl = photoUrl;
+        this.numberOfItems = numberOfItems;
         this.totalAmount = totalAmount;
+        this.paymentStatus = paymentStatus;
     }
-
     public Long getOrderId() {
         return orderId;
     }
@@ -38,10 +42,6 @@ public class OrderDto {
 
     public OrderStatus getStatus() {
         return status;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
     }
 
     public double getTotalAmount() {
@@ -68,13 +68,26 @@ public class OrderDto {
         return this;
     }
 
-    public OrderDto setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public OrderDto setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
         return this;
     }
 
-    public OrderDto setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
+    public Integer getNumberOfItems() {
+        return numberOfItems;
+    }
+
+    public OrderDto setNumberOfItems(Integer numberOfItems) {
+        this.numberOfItems = numberOfItems;
+        return this;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public OrderDto setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
         return this;
     }
 }
