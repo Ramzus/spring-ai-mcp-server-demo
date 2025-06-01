@@ -63,21 +63,4 @@ public class PaymentAppTools {
         return retriedPayment;
     }
 
-    @Tool(description = "Updates an existing payment.")
-    PaymentDto updatePayment(
-            @ToolParam(description = "The unique identifier of the payment to update") Long paymentId,
-            @ToolParam(description = "The order ID this payment is for") Long orderId,
-            @ToolParam(description = "The name of the customer making the payment") String customerName,
-            @ToolParam(description = "The payment date (format: yyyy-MM-dd)") LocalDate paymentDate,
-            @ToolParam(description = "The total amount of the payment") double totalAmount,            @ToolParam(description = "The payment status (PENDING, COMPLETED, FAILED)") PaymentStatus status) {
-
-        PaymentDto paymentDto = new PaymentDto(paymentId, orderId, customerName, paymentDate, totalAmount, status);
-        PaymentDto updatedPayment = paymentAppService.updatePayment(paymentDto);
-        
-        return updatedPayment;
-    }    @Tool(description = "Deletes a payment by its ID.")
-    boolean deletePayment(@ToolParam(description = "The unique identifier of the payment to delete") Long paymentId) {
-        boolean deleted = paymentAppService.deletePayment(paymentId);
-        return deleted;
-    }
 }
