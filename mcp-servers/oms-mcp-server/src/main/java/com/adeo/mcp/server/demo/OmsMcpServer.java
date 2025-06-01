@@ -1,6 +1,5 @@
 package com.adeo.mcp.server.demo;
 
-import com.adeo.mcp.server.demo.tools.IncidentAppTools;
 import com.adeo.mcp.server.demo.tools.OrderAppTools;
 import com.adeo.mcp.server.demo.tools.PaymentAppTools;
 import org.springframework.ai.tool.ToolCallbackProvider;
@@ -17,9 +16,9 @@ public class OmsMcpServer {
     }
 
     @Bean
-    public ToolCallbackProvider omsTools(OrderAppTools orderAppTools, PaymentAppTools paymentAppTools, IncidentAppTools incidentAppTools) {
+    public ToolCallbackProvider omsTools(OrderAppTools orderAppTools, PaymentAppTools paymentAppTools) {
         return MethodToolCallbackProvider.builder()
-                .toolObjects(orderAppTools, paymentAppTools, incidentAppTools)
+                .toolObjects(orderAppTools, paymentAppTools)
                 .build();
     }
 

@@ -1,51 +1,36 @@
 package com.adeo.mcp.server.demo.service.dto;
 
 import com.adeo.mcp.server.demo.service.dto.enums.OrderStatus;
+import com.adeo.mcp.server.demo.service.dto.enums.PaymentStatus;
 
 import java.time.LocalDate;
 
 public class OrderDto {
 
-    private Long orderId;  // Unique identifier for the order
-    private String customerName;  // Name of the customer who placed the order
-    private LocalDate orderDate;  // Date when the order was placed
-    private OrderStatus status;  // Current status of the order (e.g., CREATED, PENDING, SHIPPED, DELIVERED, CANCELLED)
-    private String photoUrl;  // URL of the product photo associated with the order
-    private double totalAmount;  // Total amount for the order
+    private Long orderId;
+    private String customerName;
+    private LocalDate orderDate;
+    private OrderStatus status;
+    private Integer numberOfItems;
+    private double totalAmount;
+    private PaymentStatus paymentStatus;
+
     public OrderDto() {
         // Default constructor
     }
-    public OrderDto(Long orderId, String customerName, LocalDate orderDate, OrderStatus status, String photoUrl, double totalAmount) {
+
+    public OrderDto(Long orderId, String customerName, LocalDate orderDate, OrderStatus status, Integer numberOfItems, double totalAmount, PaymentStatus paymentStatus) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.orderDate = orderDate;
         this.status = status;
-        this.photoUrl = photoUrl;
+        this.numberOfItems = numberOfItems;
         this.totalAmount = totalAmount;
+        this.paymentStatus = paymentStatus;
     }
 
     public Long getOrderId() {
         return orderId;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public LocalDate getOrderDate() {
-        return orderDate;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public double getTotalAmount() {
-        return totalAmount;
     }
 
     public OrderDto setOrderId(Long orderId) {
@@ -53,9 +38,17 @@ public class OrderDto {
         return this;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
     public OrderDto setCustomerName(String customerName) {
         this.customerName = customerName;
         return this;
+    }
+
+    public LocalDate getOrderDate() {
+        return orderDate;
     }
 
     public OrderDto setOrderDate(LocalDate orderDate) {
@@ -63,18 +56,39 @@ public class OrderDto {
         return this;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
     public OrderDto setStatus(OrderStatus status) {
         this.status = status;
         return this;
     }
 
-    public OrderDto setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public Integer getNumberOfItems() {
+        return numberOfItems;
+    }
+
+    public OrderDto setNumberOfItems(Integer numberOfItems) {
+        this.numberOfItems = numberOfItems;
         return this;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
     }
 
     public OrderDto setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+        return this;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public OrderDto setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
         return this;
     }
 }
