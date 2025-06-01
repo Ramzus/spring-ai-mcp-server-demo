@@ -22,7 +22,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     // Spring AI
     implementation("org.springframework.ai:spring-ai-mcp-server-spring-boot-starter:1.0.0-M6")
