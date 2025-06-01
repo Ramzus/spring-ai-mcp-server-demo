@@ -3,6 +3,10 @@ package com.example.oms.mcp.server.service;
 import com.example.oms.mcp.server.service.dto.IncidentDto;
 import com.example.oms.mcp.server.service.dto.enums.IncidentSeverity;
 import com.example.oms.mcp.server.service.dto.enums.IncidentStatus;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -21,30 +25,44 @@ public class IncidentAppService {
     }
 
     public List<IncidentDto> getAllIncidents() {
-        IncidentDto[] incidents = restTemplate.getForObject(BASE_URL, IncidentDto[].class);
-        if (incidents == null) {
-            return List.of();
-        }
+        ResponseEntity<List<IncidentDto>> response = restTemplate.exchange(
+                BASE_URL,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        List<IncidentDto> incidents = response.getBody();
 
-        return Arrays.asList(incidents);
+        return incidents;
     }
 
     public List<IncidentDto> getCurrentIncidents() {
         String url = BASE_URL + "/current";
 
-        IncidentDto[] incidents = restTemplate.getForObject(url, IncidentDto[].class);
-        if (incidents == null) {
-            return List.of();
-        }
+        ResponseEntity<List<IncidentDto>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        List<IncidentDto> incidents = response.getBody();
 
-        return Arrays.asList(incidents);
+        return incidents;
     }
 
     public IncidentDto getIncident(Long incidentId) {
         String url = BASE_URL + "/" + incidentId;
 
         try {
-            return restTemplate.getForObject(url, IncidentDto.class);
+            ResponseEntity<IncidentDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    IncidentDto.class
+            );
+            return response.getBody();
         } catch (HttpClientErrorException.NotFound e) {
             return null;
         }
@@ -53,22 +71,57 @@ public class IncidentAppService {
     public List<IncidentDto> getIncidentsByStatus(IncidentStatus status) {
         String url = BASE_URL + "/status/" + status;
 
-        IncidentDto[] incidents = restTemplate.getForObject(url, IncidentDto[].class);
-        if (incidents == null) {
-            return List.of();
-        }
+        ResponseEntity<List<IncidentDto>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        List<IncidentDto> incidents = response.getBody();
 
-        return Arrays.asList(incidents);
+        return incidents;
     }
 
     public List<IncidentDto> getIncidentsBySeverity(IncidentSeverity severity) {
         String url = BASE_URL + "/severity/" + severity;
 
-        IncidentDto[] incidents = restTemplate.getForObject(url, IncidentDto[].class);
-        if (incidents == null) {
-            return List.of();
-        }
+        ResponseEntity<List<IncidentDto>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        List<IncidentDto> incidents = response.getBody();
 
-        return Arrays.asList(incidents);
+        return incidents;
+    }
+
+    public IncidentDto createIncident(IncidentDto incidentDto) {
+        ResponseEntity<IncidentDto> response = restTemplate.exchange(
+                BASE_URL,
+                HttpMethod.POST,
+                new HttpEntity<>(incidentDto),
+                IncidentDto.class
+        );
+        return response.getBody();
+    }
+
+    public IncidentDto updateIncident(Long incidentId, IncidentDto incidentDto) {
+        String url = BASE_URL + "/" + incidentId;
+        incidentDto.setId(incidentId);
+
+        try {
+            ResponseEntity<IncidentDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(incidentDto),
+                    IncidentDto.class
+            );
+            return response.getBody();
+        } catch (HttpClientErrorException.NotFound e) {
+            return null;
+        }
     }
 }

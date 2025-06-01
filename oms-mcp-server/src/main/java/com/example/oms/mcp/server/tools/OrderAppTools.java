@@ -2,13 +2,11 @@ package com.example.oms.mcp.server.tools;
 
 import com.example.oms.mcp.server.service.OrderAppService;
 import com.example.oms.mcp.server.service.dto.OrderDto;
-import com.example.oms.mcp.server.service.dto.enums.OrderStatus;
 
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
