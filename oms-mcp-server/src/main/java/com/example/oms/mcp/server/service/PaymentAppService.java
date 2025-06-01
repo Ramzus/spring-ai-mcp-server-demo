@@ -1,6 +1,7 @@
 package com.example.oms.mcp.server.service;
 
 import com.example.oms.mcp.server.service.dto.PaymentDto;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,19 +24,29 @@ public class PaymentAppService {
     }
 
     public List<PaymentDto> getAllPayments() {
-        PaymentDto[] payments = restTemplate.getForObject(BASE_URL, PaymentDto[].class);
-        if (payments == null) {
-            return List.of();
-        }
+        ResponseEntity<List<PaymentDto>> response = restTemplate.exchange(
+                BASE_URL,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        List<PaymentDto> payments = response.getBody();
 
-        return Arrays.asList(payments);
+        return payments;
     }
 
     public PaymentDto getPayment(Long paymentId) {
         String url = BASE_URL + "/" + paymentId;
 
         try {
-            return restTemplate.getForObject(url, PaymentDto.class);
+            ResponseEntity<PaymentDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    PaymentDto.class
+            );
+            return response.getBody();
         } catch (HttpClientErrorException.NotFound e) {
             return null;
         }
@@ -45,25 +55,30 @@ public class PaymentAppService {
     public List<PaymentDto> getPaymentsByOrderId(Long orderId) {
         String url = BASE_URL + "/order/" + orderId;
 
+        ResponseEntity<List<PaymentDto>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        List<PaymentDto> payments = response.getBody();
 
-        PaymentDto[] payments = restTemplate.getForObject(url, PaymentDto[].class);
-        if (payments == null) {
-            return List.of();
-        }
-
-        return Arrays.asList(payments);
+        return payments;
     }
 
     public PaymentDto createPayment(PaymentDto paymentDto) {
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<PaymentDto> request = new HttpEntity<>(paymentDto, headers);
 
-        ResponseEntity<PaymentDto> response = restTemplate.postForEntity(BASE_URL, request, PaymentDto.class);
-        PaymentDto createdPayment = response.getBody();
-
-        return createdPayment;
+        ResponseEntity<PaymentDto> response = restTemplate.exchange(
+                BASE_URL,
+                HttpMethod.POST,
+                request,
+                PaymentDto.class
+        );
+        return response.getBody();
     }
 
     public PaymentDto retryPayment(Long paymentId) {
@@ -74,10 +89,13 @@ public class PaymentAppService {
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Void> request = new HttpEntity<>(headers);
 
-            ResponseEntity<PaymentDto> response = restTemplate.postForEntity(url, request, PaymentDto.class);
-            PaymentDto retriedPayment = response.getBody();
-
-            return retriedPayment;
+            ResponseEntity<PaymentDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    request,
+                    PaymentDto.class
+            );
+            return response.getBody();
         } catch (HttpClientErrorException.NotFound e) {
             return null;
         }
@@ -92,9 +110,7 @@ public class PaymentAppService {
             HttpEntity<PaymentDto> request = new HttpEntity<>(paymentDto, headers);
 
             ResponseEntity<PaymentDto> response = restTemplate.exchange(url, HttpMethod.PUT, request, PaymentDto.class);
-            PaymentDto updatedPayment = response.getBody();
-
-            return updatedPayment;
+            return response.getBody();
         } catch (HttpClientErrorException.NotFound e) {
             return null;
         }

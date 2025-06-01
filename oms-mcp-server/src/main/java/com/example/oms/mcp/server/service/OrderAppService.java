@@ -1,6 +1,7 @@
 package com.example.oms.mcp.server.service;
 
 import com.example.oms.mcp.server.service.dto.OrderDto;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,29 +19,41 @@ public class OrderAppService {
 
     public OrderAppService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-    }
-
-    public List<OrderDto> getOrders() {
-        OrderDto[] orders = restTemplate.getForObject(BASE_URL, OrderDto[].class);
+    }    public List<OrderDto> getOrders() {
+        ResponseEntity<List<OrderDto>> response = restTemplate.exchange(
+                BASE_URL,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {}
+        );
+        List<OrderDto> orders = response.getBody();
         if (orders == null) {
             return List.of();
         }
 
-        return List.of(orders);
-    }
-
-    public OrderDto getOrder(Long orderId) {
+        return orders;
+    }    public OrderDto getOrder(Long orderId) {
         String url = BASE_URL + "/" + orderId;
 
         try {
-            return restTemplate.getForObject(url, OrderDto.class);
+            ResponseEntity<OrderDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    OrderDto.class
+            );
+            return response.getBody();
         } catch (HttpClientErrorException.NotFound e) {
             return null;
         }
-    }
-
-    public OrderDto createOrder(OrderDto orderDto) {
-        return restTemplate.postForObject(BASE_URL, orderDto, OrderDto.class);
+    }    public OrderDto createOrder(OrderDto orderDto) {
+        ResponseEntity<OrderDto> response = restTemplate.exchange(
+                BASE_URL,
+                HttpMethod.POST,
+                new HttpEntity<>(orderDto),
+                OrderDto.class
+        );
+        return response.getBody();
     }
 
     public OrderDto updateOrder(Long orderId, OrderDto orderDto) {
@@ -65,13 +78,17 @@ public class OrderAppService {
 
         restTemplate.delete(url);
 
-    }
-
-    public OrderDto moveOrderForward(Long orderId) {
+    }    public OrderDto moveOrderForward(Long orderId) {
         String url = BASE_URL + "/" + orderId + "/next";
 
         try {
-            return restTemplate.postForObject(url, null, OrderDto.class);
+            ResponseEntity<OrderDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    null,
+                    OrderDto.class
+            );
+            return response.getBody();
         } catch (HttpClientErrorException.NotFound e) {
             return null;
         }
