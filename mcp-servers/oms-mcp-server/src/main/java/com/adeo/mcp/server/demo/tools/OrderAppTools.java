@@ -31,4 +31,10 @@ public class OrderAppTools {
         OrderDto order = orderAppService.getOrder(orderId);
         return order;
     }
+
+    @Tool(description = "Move forward the order status to the next step in the process. Should be used only if the order is in a valid state to be moved forward.")
+    OrderDto moveForwardOrder(@ToolParam(description = "The unique identifier of the order to move forward") Long orderId) {
+        OrderDto order = orderAppService.moveOrderForward(orderId);
+        return order;
+    }
 }
