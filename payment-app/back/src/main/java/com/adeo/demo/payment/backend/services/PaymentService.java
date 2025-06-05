@@ -11,14 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
-    
+
     private final PaymentRepository paymentRepository;
-    private final Random random = new Random();
 
     @Autowired
     public PaymentService(PaymentRepository paymentRepository) {
@@ -30,18 +28,18 @@ public class PaymentService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-    
+
     public PaymentDto getPayment(Long paymentId) {
         Optional<Payment> payment = paymentRepository.findById(paymentId);
         return payment.map(this::toDto).orElse(null);
     }
-    
+
     public List<PaymentDto> getPaymentsByOrderId(Long orderId) {
         return paymentRepository.findByOrderId(orderId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-    
+
     @Transactional
     public PaymentDto createPayment(PaymentDto paymentDto) {
         Payment payment = toEntity(paymentDto);
@@ -56,11 +54,11 @@ public class PaymentService {
         Payment saved = paymentRepository.save(payment);
         return toDto(saved);
     }
-    
+
     @Transactional
     public PaymentDto updatePayment(PaymentDto paymentDto) {
         if (paymentDto.getPaymentId() == null) return null;
-        
+
         Optional<Payment> existing = paymentRepository.findById(paymentDto.getPaymentId());
         if (existing.isPresent()) {
             Payment payment = toEntity(paymentDto);
@@ -69,18 +67,17 @@ public class PaymentService {
         }
         return null;
     }
-    
+
     @Transactional
     public PaymentDto retryPayment(Long paymentId) {
         Optional<Payment> optionalPayment = paymentRepository.findById(paymentId);
         if (optionalPayment.isPresent()) {
             Payment payment = optionalPayment.get();
-            
+
             // Only retry failed payments
             if (payment.getStatus() == PaymentStatus.FAILED) {
                 // Simulate payment processing with 70% success rate
-                boolean isSuccessful = random.nextDouble() > 0.3;
-                payment.setStatus(isSuccessful ? PaymentStatus.COMPLETED : PaymentStatus.FAILED);
+                payment.setStatus(PaymentStatus.COMPLETED);
                 payment.setPaymentDate(LocalDate.now()); // Update payment date
                 Payment saved = paymentRepository.save(payment);
                 return toDto(saved);
@@ -89,12 +86,12 @@ public class PaymentService {
         }
         return null;
     }
-    
+
     @Transactional
     public void deletePayment(Long paymentId) {
         paymentRepository.deleteById(paymentId);
     }
-    
+
     // --- Mapping helpers ---
     private PaymentDto toDto(Payment payment) {
         return new PaymentDto(
@@ -106,7 +103,7 @@ public class PaymentService {
                 payment.getStatus()
         );
     }
-    
+
     private Payment toEntity(PaymentDto dto) {
         Payment payment = new Payment();
         payment.setId(dto.getPaymentId());
